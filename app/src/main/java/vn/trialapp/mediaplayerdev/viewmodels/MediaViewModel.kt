@@ -1,7 +1,6 @@
-package vn.trialapp.mediaplayerdev
+package vn.trialapp.mediaplayerdev.viewmodels
 
 import android.net.Uri
-import android.provider.MediaStore.Audio.Media
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -61,7 +60,7 @@ class MediaViewModel @Inject constructor(
         }
     }
 
-    fun onUIEvent(uiEvent: MediaUiEvent) = viewModelScope.launch {
+    fun onUiEvent(uiEvent: MediaUiEvent) = viewModelScope.launch {
         when (uiEvent) {
             is MediaUiEvent.Backward -> mediaServiceHandler.onPlayerEvent(PlayerEvent.Backward)
             is MediaUiEvent.Forward -> mediaServiceHandler.onPlayerEvent(PlayerEvent.Forward)

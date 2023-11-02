@@ -1,4 +1,4 @@
-package vn.trialapp.mediaplayerdev
+package vn.trialapp.mediaplayerdev.viewmodels
 
 sealed class MediaUiEvent {
     object PlayPause : MediaUiEvent()
