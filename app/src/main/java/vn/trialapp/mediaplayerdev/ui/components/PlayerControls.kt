@@ -13,7 +13,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import vn.trialapp.mediaplayerdev.ui.theme.MediaPlayerDevTheme
 import vn.trialapp.mediaplayerdev.viewmodels.MediaUiEvent
 
 @Composable
@@ -52,5 +54,15 @@ internal fun PlayerControls(
                 .padding(12.dp)
                 .size(34.dp)
         )
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewPlayerControls() {
+    MediaPlayerDevTheme {
+        PlayerControls(
+            playResourceProvider = { android.R.drawable.ic_media_pause },
+            onUiEvent = { })
     }
 }
