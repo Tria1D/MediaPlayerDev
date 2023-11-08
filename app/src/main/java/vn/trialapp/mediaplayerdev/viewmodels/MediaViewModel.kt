@@ -10,7 +10,6 @@ import vn.trialapp.mediaplayerdev.service.MediaServiceHandler
 import androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi
 import androidx.lifecycle.viewmodel.compose.saveable
 import androidx.media3.common.MediaItem
-import androidx.media3.common.MediaMetadata
 import androidx.media3.common.MediaMetadata.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -80,7 +79,7 @@ class MediaViewModel @Inject constructor(
         val mediaItem = MediaItem.Builder()
             .setUri("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3")
             .setMediaMetadata(
-                MediaMetadata.Builder()
+                Builder()
                     .setMediaType(MEDIA_TYPE_FOLDER_ALBUMS)
                     .setIsBrowsable(true)
                     .setArtworkUri(Uri.parse("https://i.pinimg.com/736x/4b/02/1f/4b021f002b90ab163ef41aaaaa17c7a4.jpg"))
