@@ -1,4 +1,4 @@
-package vn.trialapp.mediaplayerdev.service
+package vn.trialapp.mediaplayerdev.service.media
 
 sealed class MediaServiceState {
     object Initial: MediaServiceState()

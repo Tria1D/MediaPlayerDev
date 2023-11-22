@@ -12,7 +12,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import vn.trialapp.mediaplayerdev.route.Destination
 import vn.trialapp.mediaplayerdev.screens.main.MainScreen
 import vn.trialapp.mediaplayerdev.screens.secondary.SecondaryScreen
-import vn.trialapp.mediaplayerdev.service.MediaService
+import vn.trialapp.mediaplayerdev.service.media.MediaService
 import vn.trialapp.mediaplayerdev.ui.theme.MediaPlayerDevTheme
 import vn.trialapp.mediaplayerdev.viewmodels.MediaViewModel
 

@@ -37,10 +37,12 @@ internal fun MainScreen(
         MediaSearchBar(
             leadingIcon = Pair(Icons.Default.Search, "Search Icon"),
             trailingIcon = Pair(Icons.Default.Close, "Close Icon"),
-            historyIcon = Pair(Icons.Default.History, "History Icon")
+            historyIcon = Pair(Icons.Default.History, "History Icon"),
+            onSearchClicked = mediaViewModel::requestSearch
         )
 
         when (state.value) {
+            is MediaUiState.None -> { }
 
             is MediaUiState.Initial -> CircularProgressIndicator(
                 modifier = Modifier
@@ -96,7 +98,8 @@ private fun ReadyContent(
 private fun MediaSearchBar(
     leadingIcon: Pair<ImageVector, String>,
     trailingIcon: Pair<ImageVector, String>,
-    historyIcon: Pair<ImageVector, String>
+    historyIcon: Pair<ImageVector, String>,
+    onSearchClicked: (String) -> Unit = {}
 ) {
     var searchText by remember { mutableStateOf("") }
     var isActive by remember { mutableStateOf(false) }
@@ -109,6 +112,7 @@ private fun MediaSearchBar(
             searchText = it
         },
         onSearch = {
+            onSearchClicked(searchText)
             itemsSearched.add(searchText)
             isActive = false
             searchText = ""

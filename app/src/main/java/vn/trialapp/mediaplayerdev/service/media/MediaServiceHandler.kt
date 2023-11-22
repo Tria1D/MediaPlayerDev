@@ -1,4 +1,4 @@
-package vn.trialapp.mediaplayerdev.service
+package vn.trialapp.mediaplayerdev.service.media
 
 import android.annotation.SuppressLint
 import androidx.media3.common.MediaItem
