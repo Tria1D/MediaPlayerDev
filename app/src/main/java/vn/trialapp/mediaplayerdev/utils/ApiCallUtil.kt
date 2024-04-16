@@ -5,7 +5,6 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import java.net.SocketTimeoutException
 
-private const val TAG = "safeApiCall"
 
 internal suspend fun <ResponseType> safeApiCall(
     dispatcher: CoroutineDispatcher,
@@ -15,7 +14,7 @@ internal suspend fun <ResponseType> safeApiCall(
         val responseBody = apiCall.invoke()
 
         responseBody?.let { nonNullResponseBody ->
-            Log.d(TAG, "Response: $nonNullResponseBody")
+            LogUtil.d("Response: $nonNullResponseBody")
             ResultStatus.Success(nonNullResponseBody)
         } ?: run {
             ResultStatus.Error(ErrorType.SERVER_ERROR.type)

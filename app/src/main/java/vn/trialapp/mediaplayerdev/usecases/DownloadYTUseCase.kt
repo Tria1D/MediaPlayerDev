@@ -1,16 +1,13 @@
 package vn.trialapp.mediaplayerdev.usecases
 
 import android.content.Context
-import android.util.Log
 import android.util.SparseArray
 import com.maxrave.kotlinyoutubeextractor.*
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import vn.trialapp.mediaplayerdev.di.IoDispatcher
 import vn.trialapp.mediaplayerdev.repository.local.DataStoreRepository
+import vn.trialapp.mediaplayerdev.utils.LogUtil
 import javax.inject.Inject
 
 class DownloadYTUseCase @Inject constructor(
@@ -18,7 +15,6 @@ class DownloadYTUseCase @Inject constructor(
     @IoDispatcher private val dispatcher: CoroutineDispatcher,
     private val dataStoreRepository: DataStoreRepository
 ) {
-    private val TAG = "DownloadYTUseCase"
 
 //    suspend operator fun invoke() {
 //        val yt = YTExtractor(con = context, CACHING = true, LOGGING = true, retryCount = 3)
@@ -30,10 +26,8 @@ class DownloadYTUseCase @Inject constructor(
 //                ytFiles = yt.getYTFiles()
 //                val audioYtFiles = ytFiles?.getAudioOnly()?.bestQuality()
 //                audioYtFiles?.url?.let {
-//                    Log.d(TAG, "DownloadYTUseCase: $it")
 //                    dataStoreRepository.saveAudioUrl(it)
 //                } ?: run {
-//                    Log.d(TAG, "DownloadYTUseCase audioYtFiles is null")
 //                }
 //            }
 //        }
@@ -46,11 +40,11 @@ class DownloadYTUseCase @Inject constructor(
             State.SUCCESS -> {
                 ytFiles = yt.getYTFiles()
                 val audioYtFiles = ytFiles?.getAudioOnly()?.bestQuality()
-                Log.d(TAG, "DownloadYTUseCase: ${audioYtFiles?.url}")
+                LogUtil.d("DownloadYTUseCase: ${audioYtFiles?.url}")
                 audioYtFiles?.url
             }
             else -> {
-                Log.d(TAG, "DownloadYTUseCase audioYtFiles is null")
+                LogUtil.d("DownloadYTUseCase audioYtFiles is null")
                 null
             }
         }

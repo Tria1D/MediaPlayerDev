@@ -1,6 +1,5 @@
 package vn.trialapp.mediaplayerdev.viewmodels
 
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -14,7 +13,6 @@ import androidx.media3.common.MediaMetadata.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import vn.trialapp.mediaplayerdev.repository.local.impl.DataStoreImpl
 import vn.trialapp.mediaplayerdev.service.media.MediaServiceState
 import vn.trialapp.mediaplayerdev.service.media.PlayerEvent
 import vn.trialapp.mediaplayerdev.usecases.DownloadYTUseCase
@@ -23,6 +21,7 @@ import vn.trialapp.mediaplayerdev.usecases.SearchUseCase
 import vn.trialapp.mediaplayerdev.usecases.SearchYTUseCase
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import vn.trialapp.mediaplayerdev.utils.LogUtil
 
 @OptIn(SavedStateHandleSaveableApi::class)
 @HiltViewModel
@@ -34,8 +33,6 @@ class MediaViewModel @Inject constructor(
     private val searchYTUseCase: SearchYTUseCase,
     private val downloadYTUseCase: DownloadYTUseCase
 ): ViewModel() {
-
-    private val TAG = "MediaViewModel"
 
     var duration by savedStateHandle.saveable { mutableStateOf(0L) }
     var progress by savedStateHandle.saveable { mutableStateOf(0f) }
@@ -51,7 +48,7 @@ class MediaViewModel @Inject constructor(
         }
     }
 
-    private suspend fun initMediaPlayer() {
+    private suspend fun onMediaServiceState() {
         mediaServiceHandler.mediaState.collect { mediaState ->
             when (mediaState) {
                 is MediaServiceState.Buffering -> calculateProgressValues(mediaState.progress)
@@ -67,9 +64,11 @@ class MediaViewModel @Inject constructor(
     }
 
     override fun onCleared() {
+        LogUtil.traceIn()
         viewModelScope.launch {
             mediaServiceHandler.onPlayerEvent(PlayerEvent.Stop)
         }
+        LogUtil.traceOut()
     }
 
     fun onUiEvent(uiEvent: MediaUiEvent) = viewModelScope.launch {
@@ -89,6 +88,7 @@ class MediaViewModel @Inject constructor(
     }
 
     private fun loadData(audioUrl: String) {
+        LogUtil.traceIn()
         val mediaItem = MediaItem.Builder()
             .setUri(audioUrl)
             .setMediaMetadata(
@@ -102,6 +102,7 @@ class MediaViewModel @Inject constructor(
             ).build()
 
         mediaServiceHandler.addMediaItem(mediaItem)
+        LogUtil.traceOut()
     }
 
     fun formatDuration(duration: Long): String {
@@ -117,38 +118,45 @@ class MediaViewModel @Inject constructor(
     }
 
     private suspend fun requestGetAccessToken() {
+        LogUtil.traceIn()
         getAccessTokenUseCase()
+        LogUtil.traceOut()
     }
 
     fun requestSearch(queryString: String) {
-        Log.d(TAG, "requestSearch")
+        LogUtil.traceIn()
         viewModelScope.launch {
             _uiState.value = MediaUiState.Initial
             val isSearchUseCaseSucceeded = searchUseCase(queryString)
             if (isSearchUseCaseSucceeded) {
                 requestSearchYT(queryString)
             } else {
-                Log.d(TAG,"requestSearch fail")
+                LogUtil.d("requestSearch fail")
             }
         }
+        LogUtil.traceOut()
     }
 
     private suspend fun requestSearchYT(queryString: String) {
+        LogUtil.traceIn()
         val isSearchYTSucceeded = searchYTUseCase(queryString)
         if (isSearchYTSucceeded) {
             requestDownloadYTAudio()
         } else {
-            Log.d(TAG,"requestSearchYT else")
+            LogUtil.d("requestSearchYT else")
         }
+        LogUtil.traceOut()
     }
 
     private suspend fun requestDownloadYTAudio() {
+        LogUtil.traceIn()
         val audioUrlDownloaded = downloadYTUseCase()
         if (audioUrlDownloaded != null) {
             loadData(audioUrlDownloaded)
-            initMediaPlayer()
+            onMediaServiceState()
         } else {
-            Log.d(TAG,"requestSearchYT else")
+            LogUtil.d("requestSearchYT else")
         }
+        LogUtil.traceOut()
     }
 }
