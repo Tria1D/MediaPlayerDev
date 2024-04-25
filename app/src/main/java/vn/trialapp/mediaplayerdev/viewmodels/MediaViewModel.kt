@@ -38,6 +38,7 @@ class MediaViewModel @Inject constructor(
     var progress by savedStateHandle.saveable { mutableStateOf(0f) }
     var progressString by savedStateHandle.saveable { mutableStateOf("00:00") }
     var isPlaying by savedStateHandle.saveable { mutableStateOf(false) }
+    var imageUrl by savedStateHandle.saveable { mutableStateOf("") }
 
     private val _uiState = MutableStateFlow<MediaUiState>(MediaUiState.None)
     val uiState = _uiState.asStateFlow()
@@ -150,8 +151,9 @@ class MediaViewModel @Inject constructor(
 
     private suspend fun requestDownloadYTAudio() {
         LogUtil.traceIn()
-        val audioUrlDownloaded = downloadYTUseCase()
+        val (audioUrlDownloaded, imageUrlDownloaded) = downloadYTUseCase()
         if (audioUrlDownloaded != null) {
+            imageUrl = imageUrlDownloaded?:""
             loadData(audioUrlDownloaded)
             onMediaServiceState()
         } else {

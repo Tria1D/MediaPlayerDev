@@ -22,6 +22,7 @@ class SearchUseCase @Inject constructor(
                 resultStatus.data?.tracks?.items?.get(0)?.let {
                     dataStoreRepository.saveArtistName(it.name)
                     dataStoreRepository.saveSongName(it.album.artists[0].name)
+                    dataStoreRepository.saveImageUrl(it.album.images[0].url)
                 }
                 true
             }

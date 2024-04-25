@@ -14,4 +14,6 @@ interface DataStoreRepository {
     suspend fun fetchVideoId(): String
     suspend fun saveAudioUrl(audioUrl: String)
     suspend fun fetchAudioUrl(): String
+    suspend fun saveImageUrl(imageUrl: String)
+    suspend fun fetchImageUrl(): String
 }

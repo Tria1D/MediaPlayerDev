@@ -24,6 +24,7 @@ class DataStoreImpl @Inject constructor(
         val SONG_NAME = stringPreferencesKey("song_name")
         val VIDEO_ID = stringPreferencesKey("video_id")
         val AUDIO_URL = stringPreferencesKey("audio_url")
+        val IMAGE_URL = stringPreferencesKey("image_url")
     }
 
     override fun getAuthToken(): Flow<String> {
@@ -98,5 +99,17 @@ class DataStoreImpl @Inject constructor(
     override suspend fun fetchAudioUrl(): String {
         LogUtil.d("fetchAudioUrl: " + dataStore.data.first()[AUDIO_URL])
         return dataStore.data.first()[AUDIO_URL] ?: ""
+    }
+
+    override suspend fun saveImageUrl(imageUrl: String) {
+        LogUtil.d("saveImageUrl: $imageUrl")
+        dataStore.edit {
+            it[IMAGE_URL] = imageUrl
+        }
+    }
+
+    override suspend fun fetchImageUrl(): String {
+        LogUtil.d("fetchImageUrl: " + dataStore.data.first()[IMAGE_URL])
+        return dataStore.data.first()[IMAGE_URL] ?: ""
     }
 }

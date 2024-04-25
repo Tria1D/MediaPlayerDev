@@ -18,9 +18,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import vn.trialapp.mediaplayerdev.route.Destination
+import vn.trialapp.mediaplayerdev.ui.components.ImageDiskUi
 import vn.trialapp.mediaplayerdev.ui.components.PlayerUi
 import vn.trialapp.mediaplayerdev.ui.components.SearchBar
-import vn.trialapp.mediaplayerdev.utils.LogUtil
 import vn.trialapp.mediaplayerdev.viewmodels.MediaUiState
 
 @Composable
@@ -71,6 +71,12 @@ private fun ReadyContent(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        ImageDiskUi(
+            modifier = Modifier.padding(bottom = 20.dp),
+            isPlaying = mediaViewModel.isPlaying,
+            imageUrl = mediaViewModel.imageUrl
+        )
+
         PlayerUi(
             durationString = mediaViewModel.formatDuration(mediaViewModel.duration),
             playResourceProvider = {
