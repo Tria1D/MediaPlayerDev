@@ -3,6 +3,7 @@ package vn.trialapp.mediaplayerdev.screens.main
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
@@ -11,31 +12,37 @@ import androidx.compose.material.Icon
 import androidx.compose.material.icons.filled.History
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
 import vn.trialapp.mediaplayerdev.viewmodels.MediaViewModel
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import vn.trialapp.mediaplayerdev.route.Destination
-import vn.trialapp.mediaplayerdev.ui.components.ImageDiskUi
-import vn.trialapp.mediaplayerdev.ui.components.PlayerUi
+import androidx.compose.ui.unit.times
+import vn.trialapp.mediaplayerdev.ui.components.*
 import vn.trialapp.mediaplayerdev.ui.components.SearchBar
+import vn.trialapp.mediaplayerdev.ui.theme.DenimBlue
 import vn.trialapp.mediaplayerdev.viewmodels.MediaUiState
 
 @Composable
 internal fun MainScreen(
     mediaViewModel: MediaViewModel,
-    navController: NavController,
     startService: () -> Unit
 ) {
     val state = mediaViewModel.uiState.collectAsStateWithLifecycle()
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
+            .background(Color.Transparent)
     ) {
+        HeaderBackground()
         MediaSearchBar(
+            modifier = Modifier.padding(
+                start = 20.dp,
+                top = 20.dp,
+                end = 20.dp).align(Alignment.TopCenter),
             leadingIcon = Pair(Icons.Default.Search, "Search Icon"),
             trailingIcon = Pair(Icons.Default.Close, "Close Icon"),
             historyIcon = Pair(Icons.Default.History, "History Icon"),
@@ -55,7 +62,8 @@ internal fun MainScreen(
                 LaunchedEffect(key1 = true) {
                     startService()
                 }
-                ReadyContent(mediaViewModel = mediaViewModel, navController = navController)
+                BackgroundImageUi(imageUrl = mediaViewModel.imageUrl)
+                ReadyContent(mediaViewModel = mediaViewModel)
             }
         }
     }
@@ -63,21 +71,20 @@ internal fun MainScreen(
 
 @Composable
 private fun ReadyContent(
-    mediaViewModel: MediaViewModel,
-    navController: NavController
+    mediaViewModel: MediaViewModel
 ) {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+
+    Box(
+        modifier = Modifier.fillMaxSize()
     ) {
         ImageDiskUi(
-            modifier = Modifier.padding(bottom = 20.dp),
+            modifier = Modifier.padding(bottom = 20.dp).align(Alignment.Center),
             isPlaying = mediaViewModel.isPlaying,
             imageUrl = mediaViewModel.imageUrl
         )
 
         PlayerUi(
+            modifier = Modifier.align(Alignment.BottomCenter),
             durationString = mediaViewModel.formatDuration(mediaViewModel.duration),
             playResourceProvider = {
                 if (mediaViewModel.isPlaying) android.R.drawable.ic_media_pause
@@ -86,16 +93,6 @@ private fun ReadyContent(
             progressProvider = { Pair(mediaViewModel.progress, mediaViewModel.progressString) },
             onUiEvent = mediaViewModel::onUiEvent
         )
-
-        FloatingActionButton(
-            onClick = { navController.navigate(Destination.Secondary.route) },
-            modifier = Modifier.padding(horizontal = 16.dp)
-        ) {
-            Text(
-                text = "Navigate to Secondary",
-                modifier = Modifier.padding(horizontal = 16.dp)
-            )
-        }
     }
 }
 
@@ -103,6 +100,7 @@ private fun ReadyContent(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun MediaSearchBar(
+    modifier: Modifier,
     leadingIcon: Pair<ImageVector, String>,
     trailingIcon: Pair<ImageVector, String>,
     historyIcon: Pair<ImageVector, String>,
@@ -111,9 +109,18 @@ private fun MediaSearchBar(
     var searchText by remember { mutableStateOf("") }
     var isActive by remember { mutableStateOf(false) }
     val itemsSearched = remember { mutableStateListOf("") }
-
+    val maxItemsToShow = 4
+    val itemHeight = 70.dp
+    val additionalHeight = if ((itemsSearched.size - 1) < 2 && (itemsSearched.size - 1) > 0) {
+        60.dp
+    } else {
+        ((itemsSearched.size - 1).coerceAtMost(maxItemsToShow)) * 50.dp
+    }
     SearchBar(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier
+            .clip(RoundedCornerShape(25.dp))
+            .heightIn(min = itemHeight, max = itemHeight + additionalHeight)
+            .wrapContentHeight(),
         query = searchText,
         onQueryChange = {
             searchText = it
@@ -156,18 +163,41 @@ private fun MediaSearchBar(
         if (itemsSearched.size > 1) {
             for (i in 1 until itemsSearched.size) {
                 Row(
-                    modifier = Modifier.padding(all = 14.dp)
+                    modifier = Modifier
+                        .padding(all = 10.dp)
+                        .wrapContentHeight()
                 ) {
-
                     Icon(
-                        modifier = Modifier.padding(end = 10.dp),
+                        modifier = Modifier.padding(start = 5.dp, end = 10.dp),
                         imageVector = historyIcon.first,
                         contentDescription = historyIcon.second
                     )
-
                     Text(text = itemsSearched[i])
                 }
             }
         }
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewMediaSearchBar() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(DenimBlue)
+    ) {
+        HeaderBackground()
+        MediaSearchBar(
+            modifier = Modifier.padding(
+                start = 20.dp,
+                top = 20.dp,
+                end = 20.dp
+            ),
+            leadingIcon = Pair(Icons.Default.Search, "Search Icon"),
+            trailingIcon = Pair(Icons.Default.Close, "Close Icon"),
+            historyIcon = Pair(Icons.Default.History, "History Icon"),
+            onSearchClicked = { }
+        )
     }
 }

@@ -11,7 +11,6 @@ import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import vn.trialapp.mediaplayerdev.route.Destination
 import vn.trialapp.mediaplayerdev.screens.main.MainScreen
-import vn.trialapp.mediaplayerdev.screens.secondary.SecondaryScreen
 import vn.trialapp.mediaplayerdev.service.media.MediaService
 import vn.trialapp.mediaplayerdev.ui.theme.MediaPlayerDevTheme
 import vn.trialapp.mediaplayerdev.utils.LogUtil
@@ -31,16 +30,11 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
 
                 NavHost(navController = navController, startDestination = Destination.Main.route) {
-
                     composable(Destination.Main.route) {
                         MainScreen(
                             mediaViewModel = mediaViewModel,
-                            navController = navController,
                             startService = ::startService
-                        ) }
-
-                    composable(Destination.Secondary.route) {
-                        SecondaryScreen(mediaViewModel = mediaViewModel)
+                        )
                     }
                 }
             }

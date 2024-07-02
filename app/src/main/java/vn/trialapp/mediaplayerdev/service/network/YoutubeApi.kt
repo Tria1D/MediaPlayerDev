@@ -12,6 +12,8 @@ interface YoutubeApi {
         @Query("part") part: String ?= "snippet",
         @Query("maxResults") maxResults: Int ?= 1,
         @Query("type") type: String ?= "video",
+        @Query("videoCategoryId") videoCategoryId: String ?= "10",
+        @Query("videoDuration") videoDuration: String ?= "medium",
         @Query("key") key: String ?= API_KEY,
     ): SearchYTResponse
 }

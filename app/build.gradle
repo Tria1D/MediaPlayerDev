@@ -107,4 +107,7 @@ dependencies {
 
     // Youtube Extractor
     implementation 'com.github.maxrave-dev:kotlin-youtubeExtractor:0.0.7'
+
+    // Cloudy
+    implementation "com.github.skydoves:cloudy:0.1.2"
 }

@@ -1,6 +1,5 @@
 package vn.trialapp.mediaplayerdev.utils
 
-import android.util.Log
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import java.net.SocketTimeoutException
