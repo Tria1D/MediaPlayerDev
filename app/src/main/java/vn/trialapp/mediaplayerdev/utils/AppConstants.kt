@@ -16,4 +16,26 @@ class AppConstants {
     object YoutubeKey {
         const val API_KEY = ""
     }
+
+    object Firebase {
+        const val SONG_COLLECTION = "songs"
+    }
+
+    object SongDetailScreen {
+        const val INITIAL_PROGRESS_STRING = "00:00"
+        const val INITIAL_DURATION = 0L
+        const val INITIAL_PROGRESS = 0f
+        const val INITIAL_IMAGE_URL = ""
+    }
+
+    object Common {
+        const val INITIAL_ROTATION = 0f
+        const val TARGET_ROTATION_PLAYING = 360f
+        const val TARGET_ROTATION_SLOW_DOWN = 20
+        const val TWEEN_PLAYING_DURATION = 8000
+        const val TWEEN_SLOW_DOWN_DURATION = 8000
+        const val INITIAL_SEARCH_TEXT = ""
+        const val INITIAL_ITEMS_SEARCHED = ""
+        const val INITIAL_PLAYER_BAR_PROGRESS = 0f
+    }
 }

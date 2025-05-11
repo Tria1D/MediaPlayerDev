@@ -2,14 +2,19 @@ package vn.trialapp.mediaplayerdev.ui.theme
 
 import android.app.Activity
 import android.os.Build
+import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.ViewCompat
+import vn.trialapp.mediaplayerdev.ui.theme.Common.AliceBlue
 
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
@@ -30,6 +35,10 @@ fun MediaPlayerDevTheme(
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .background(AliceBlue))
+
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current

@@ -22,6 +22,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
+import vn.trialapp.mediaplayerdev.ui.theme.Common.AliceBlue
 import vn.trialapp.mediaplayerdev.ui.theme.MediaPlayerDevTheme
 
 
@@ -40,7 +41,9 @@ fun SearchBar(
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
     shape: Shape = SearchBarDefaults.inputFieldShape,
-    colors: SearchBarColors = SearchBarDefaults.colors(),
+    colors: SearchBarColors = SearchBarDefaults.colors(
+        containerColor = AliceBlue
+    ),
     tonalElevation: Dp = SearchBarDefaults.Elevation,
     windowInsets: WindowInsets = SearchBarDefaults.windowInsets,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },

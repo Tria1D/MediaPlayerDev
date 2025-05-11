@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Song Detail Screen -->
+    <dimen name="mpd_song_detail_scr_circular_progress_size">30dp</dimen>
+    <dimen name="mpd_song_detail_scr_playing_now_padding_vertical">20dp</dimen>
+    <dimen name="mpd_song_detail_scr_box_image_disk_padding_top">80dp</dimen>
+    <dimen name="mpd_song_detail_scr_image_disk_padding_bottom">20dp</dimen>
+    <dimen name="mpd_song_detail_scr_song_name_padding_top">30dp</dimen>
+    <dimen name="mpd_song_detail_scr_song_artist_padding_top">10dp</dimen>
+
+    <!-- Song Screen -->
+    <dimen name="mpd_song_scr_media_search_bar_padding_top">20dp</dimen>
+    <dimen name="mpd_song_scr_media_search_bar_padding_start">20dp</dimen>
+    <dimen name="mpd_song_scr_media_search_bar_padding_end">20dp</dimen>
+    <dimen name="mpd_song_scr_spacer_between_search_bar_and_content">20dp</dimen>
+    <dimen name="mpd_song_scr_circular_progress_size">30dp</dimen>
+
+    <!-- Component -->
+    <dimen name="mpd_bottom_player_ui_divider_height">1dp</dimen>
+    <dimen name="mpd_header_rounded_corner_bottom_start">60dp</dimen>
+    <dimen name="mpd_header_rounded_corner_bottom_end">60dp</dimen>
+    <dimen name="mpd_header_height_in">100dp</dimen>
+    <dimen name="mpd_image_disk_size">300dp</dimen>
+    <dimen name="mpd_image_disk_border_width">8dp</dimen>
+    <dimen name="mpd_search_bar_item_height">70dp</dimen>
+    <dimen name="mpd_search_bar_additional_item_height_less_than_one">60dp</dimen>
+    <dimen name="mpd_search_bar_additional_item_height_more_than_one">50dp</dimen>
+    <dimen name="mpd_search_bar_rounded_corner_size">25dp</dimen>
+    <dimen name="mpd_search_bar_item_searched_row_padding_all">10dp</dimen>
+    <dimen name="mpd_search_bar_item_searched_icon_padding_start">5dp</dimen>
+    <dimen name="mpd_search_bar_item_searched_icon_padding_end">10dp</dimen>
+    <dimen name="mpd_slider_padding_horizontal">8dp</dimen>
+    <dimen name="mpd_slider_thumb_size">20dp</dimen>
+    <dimen name="mpd_slider_thumb_border_width">6dp</dimen>
+    <dimen name="mpd_player_bar_row_progress_padding_horizontal">16dp</dimen>
+    <dimen name="mpd_player_controls_row_container_space_horizontal">35dp</dimen>
+    <dimen name="mpd_player_controls_icon_button_container_size">48dp</dimen>
+    <dimen name="mpd_player_controls_icon_button_container_border_width">3dp</dimen>
+    <dimen name="mpd_player_controls_icon_button_icon_padding_all">12dp</dimen>
+    <dimen name="mpd_player_controls_icon_button_icon_size">34dp</dimen>
+    <dimen name="mpd_player_controls_image_button_container_size">55dp</dimen>
+    <dimen name="mpd_player_controls_image_button_container_border_width">3dp</dimen>
+    <dimen name="mpd_player_controls_image_button_image_padding_all">8dp</dimen>
+    <dimen name="mpd_player_ui_box_container_padding_all">16dp</dimen>
+    <dimen name="mpd_song_list_item_row_container_border_width">3dp</dimen>
+    <dimen name="mpd_song_list_item_row_container_rounded_corner_size">8dp</dimen>
+    <dimen name="mpd_song_list_item_image_size">64dp</dimen>
+    <dimen name="mpd_song_list_item_image_rounded_corner_clip_size">8dp</dimen>
+    <dimen name="mpd_song_list_item_image_spacer_between_image_and_column">16dp</dimen>
+</resources>

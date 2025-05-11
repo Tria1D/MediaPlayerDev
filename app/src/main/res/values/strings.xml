@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">MediaPlayerDev</string>
+
+    <!-- Song Detail Screen -->
+    <string name="mdp_song_detail_scr_playing_now">PLAYING NOW</string>
+
+    <!-- Song Screen -->
+    <string name="mdp_song_scr_media_search_bar_leading_icon">Search Icon</string>
+    <string name="mdp_song_scr_media_search_bar_history_icon">History Icon</string>
+    <string name="mdp_song_scr_media_search_bar_trailing_icon">Close Icon</string>
+
+    <!-- Common -->
+    <string name="mdp_media_search_bar_placeholder_text">Search</string>
+    <string name="mdp_player_controls_backward_button">Backward Button</string>
+    <string name="mdp_player_controls_forward_button">Forward Button</string>
+    <string name="mdp_player_controls_play_pause_button">Play/Pause Button</string>
 </resources>

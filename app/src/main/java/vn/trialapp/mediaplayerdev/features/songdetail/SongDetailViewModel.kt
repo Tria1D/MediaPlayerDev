@@ -1,5 +1,7 @@
-package vn.trialapp.mediaplayerdev.viewmodels
+package vn.trialapp.mediaplayerdev.features.songdetail
 
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -13,39 +15,48 @@ import androidx.media3.common.MediaMetadata.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import vn.trialapp.mediaplayerdev.models.Song
 import vn.trialapp.mediaplayerdev.service.media.MediaServiceState
 import vn.trialapp.mediaplayerdev.service.media.PlayerEvent
 import vn.trialapp.mediaplayerdev.usecases.DownloadYTUseCase
 import vn.trialapp.mediaplayerdev.usecases.GetAccessTokenUseCase
+import vn.trialapp.mediaplayerdev.usecases.GetSongDetaiFirebaseUseCase
 import vn.trialapp.mediaplayerdev.usecases.SearchUseCase
 import vn.trialapp.mediaplayerdev.usecases.SearchYTUseCase
+import vn.trialapp.mediaplayerdev.utils.AppConstants.SongDetailScreen.INITIAL_DURATION
+import vn.trialapp.mediaplayerdev.utils.AppConstants.SongDetailScreen.INITIAL_IMAGE_URL
+import vn.trialapp.mediaplayerdev.utils.AppConstants.SongDetailScreen.INITIAL_PROGRESS
+import vn.trialapp.mediaplayerdev.utils.AppConstants.SongDetailScreen.INITIAL_PROGRESS_STRING
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import vn.trialapp.mediaplayerdev.utils.LogUtil
+import vn.trialapp.mediaplayerdev.utils.ResultStatus
 
 @OptIn(SavedStateHandleSaveableApi::class)
 @HiltViewModel
-class MediaViewModel @Inject constructor(
+class SongDetailViewModel @Inject constructor(
     private val mediaServiceHandler: MediaServiceHandler,
     savedStateHandle: SavedStateHandle,
     private val getAccessTokenUseCase: GetAccessTokenUseCase,
     private val searchUseCase: SearchUseCase,
     private val searchYTUseCase: SearchYTUseCase,
-    private val downloadYTUseCase: DownloadYTUseCase
+    private val downloadYTUseCase: DownloadYTUseCase,
+    private val getSongDetailFirebaseUseCase: GetSongDetaiFirebaseUseCase
 ): ViewModel() {
 
-    var duration by savedStateHandle.saveable { mutableStateOf(0L) }
-    var progress by savedStateHandle.saveable { mutableStateOf(0f) }
-    var progressString by savedStateHandle.saveable { mutableStateOf("00:00") }
+    var duration by savedStateHandle.saveable { mutableLongStateOf(INITIAL_DURATION) }
+    var progress by savedStateHandle.saveable { mutableFloatStateOf(INITIAL_PROGRESS) }
+    var progressString by savedStateHandle.saveable { mutableStateOf(INITIAL_PROGRESS_STRING) }
     var isPlaying by savedStateHandle.saveable { mutableStateOf(false) }
-    var imageUrl by savedStateHandle.saveable { mutableStateOf("") }
+    var imageUrl by savedStateHandle.saveable { mutableStateOf(INITIAL_IMAGE_URL) }
+    private var currentSong: Song? = null
 
-    private val _uiState = MutableStateFlow<MediaUiState>(MediaUiState.None)
+    private val _uiState = MutableStateFlow<SongDetailUiState>(SongDetailUiState.None)
     val uiState = _uiState.asStateFlow()
 
     init {
         viewModelScope.launch {
-            requestGetAccessToken()
+//            requestGetAccessToken()
         }
     }
 
@@ -53,12 +64,20 @@ class MediaViewModel @Inject constructor(
         mediaServiceHandler.mediaState.collect { mediaState ->
             when (mediaState) {
                 is MediaServiceState.Buffering -> calculateProgressValues(mediaState.progress)
-                is MediaServiceState.Initial -> _uiState.value = MediaUiState.Initial
+                is MediaServiceState.Initial -> _uiState.value = SongDetailUiState.Initial
                 is MediaServiceState.Playing -> isPlaying = mediaState.isPlaying
                 is MediaServiceState.Progress -> calculateProgressValues(mediaState.progress)
                 is MediaServiceState.Ready -> {
                     duration = mediaState.duration
-                    _uiState.value = MediaUiState.Ready
+                    currentSong?.let { song ->
+                        _uiState.value = SongDetailUiState.Ready(
+                            song = Song(
+                                title = song.title,
+                                artist = song.artist,
+                                imageUrl = song.imageUrl
+                            )
+                        )
+                    }
                 }
             }
         }
@@ -72,12 +91,12 @@ class MediaViewModel @Inject constructor(
         LogUtil.traceOut()
     }
 
-    fun onUiEvent(uiEvent: MediaUiEvent) = viewModelScope.launch {
+    fun onUiEvent(uiEvent: SongDetailUiEvent) = viewModelScope.launch {
         when (uiEvent) {
-            is MediaUiEvent.Backward -> mediaServiceHandler.onPlayerEvent(PlayerEvent.Backward)
-            is MediaUiEvent.Forward -> mediaServiceHandler.onPlayerEvent(PlayerEvent.Forward)
-            is MediaUiEvent.PlayPause -> mediaServiceHandler.onPlayerEvent(PlayerEvent.PlayPause)
-            is MediaUiEvent.UpdateProgress -> {
+            is SongDetailUiEvent.Backward -> mediaServiceHandler.onPlayerEvent(PlayerEvent.Backward)
+            is SongDetailUiEvent.Forward -> mediaServiceHandler.onPlayerEvent(PlayerEvent.Forward)
+            is SongDetailUiEvent.PlayPause -> mediaServiceHandler.onPlayerEvent(PlayerEvent.PlayPause)
+            is SongDetailUiEvent.UpdateProgress -> {
                 progress = uiEvent.newProgress
                 mediaServiceHandler.onPlayerEvent(
                     PlayerEvent.UpdateProgress(
@@ -96,9 +115,6 @@ class MediaViewModel @Inject constructor(
                 Builder()
                     .setMediaType(MEDIA_TYPE_FOLDER_ALBUMS)
                     .setIsBrowsable(true)
-//                    .setArtworkUri(Uri.parse("https://i.pinimg.com/736x/4b/02/1f/4b021f002b90ab163ef41aaaaa17c7a4.jpg"))
-//                    .setAlbumTitle("SoundHelix")
-//                    .setDisplayTitle("Song 1")
                     .build()
             ).build()
 
@@ -127,7 +143,7 @@ class MediaViewModel @Inject constructor(
     fun requestSearch(queryString: String) {
         LogUtil.traceIn()
         viewModelScope.launch {
-            _uiState.value = MediaUiState.Initial
+            _uiState.value = SongDetailUiState.Initial
             val isSearchUseCaseSucceeded = searchUseCase(queryString)
             if (isSearchUseCaseSucceeded) {
                 requestSearchYT(queryString)
@@ -160,5 +176,27 @@ class MediaViewModel @Inject constructor(
             LogUtil.d("requestSearchYT else")
         }
         LogUtil.traceOut()
+    }
+
+    fun requestGetSongDetailFirebase(index: Int) {
+        viewModelScope.launch {
+            _uiState.value = SongDetailUiState.Initial
+            when (val result = getSongDetailFirebaseUseCase(index)) {
+                is ResultStatus.Success -> {
+                    val song = result.data
+                    if (song != null) {
+                        currentSong = song
+                        loadData(song.songUrl)
+                        imageUrl = song.imageUrl
+                        onMediaServiceState()
+                    }
+                }
+
+                is ResultStatus.Error -> {
+                    val errorMessage = result.message ?: "Unknown error"
+                    LogUtil.d(errorMessage)
+                }
+            }
+        }
     }
 }

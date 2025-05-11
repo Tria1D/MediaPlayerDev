@@ -1,60 +1,42 @@
 package vn.trialapp.mediaplayerdev.ui.components
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import vn.trialapp.mediaplayerdev.R
 import vn.trialapp.mediaplayerdev.ui.theme.MediaPlayerDevTheme
-import vn.trialapp.mediaplayerdev.viewmodels.MediaUiEvent
+import vn.trialapp.mediaplayerdev.features.songdetail.SongDetailUiEvent
 
 @Composable
 internal fun PlayerControls(
     playResourceProvider: () -> Int,
-    onUiEvent: (MediaUiEvent) -> Unit
+    onUiEvent: (SongDetailUiEvent) -> Unit
 ) {
     Row(
-        horizontalArrangement = Arrangement.spacedBy(35.dp),
+        horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.mpd_player_controls_row_container_space_horizontal)),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(
-            painter = painterResource(android.R.drawable.ic_media_rew),
-            contentDescription = "Backward Button",
-            modifier = Modifier
-                .clip(CircleShape)
-                .clickable(onClick = { onUiEvent(MediaUiEvent.Backward) })
-                .padding(12.dp)
-                .size(34.dp)
+        PlayerControlsIconButton(
+            iconImage = painterResource(android.R.drawable.ic_media_rew),
+            contentDescription = stringResource(R.string.mdp_player_controls_backward_button),
+            onClick = { onUiEvent(SongDetailUiEvent.Backward) }
         )
-        Image(
-            painter = painterResource(id = playResourceProvider()),
-            contentDescription = "Play/Pause Button",
-            modifier = Modifier
-                .clip(CircleShape)
-                .clickable(onClick = { onUiEvent(MediaUiEvent.PlayPause) })
-                .padding(8.dp)
-                .size(56.dp)
+
+        PlayerControlsImageButton(
+            image =  painterResource(id = playResourceProvider()),
+            contentDescription = stringResource(R.string.mdp_player_controls_play_pause_button),
+            onClick = { onUiEvent(SongDetailUiEvent.PlayPause) }
         )
-        Icon(
-            painter = painterResource(android.R.drawable.ic_media_ff),
-            contentDescription = "Forward Button",
-            modifier = Modifier
-                .clip(CircleShape)
-                .clickable(onClick = { onUiEvent(MediaUiEvent.Forward) })
-                .padding(12.dp)
-                .size(34.dp)
+
+        PlayerControlsIconButton(
+            iconImage = painterResource(android.R.drawable.ic_media_ff),
+            contentDescription = stringResource(R.string.mdp_player_controls_forward_button),
+            onClick = { onUiEvent(SongDetailUiEvent.Forward) }
         )
     }
 }

@@ -6,34 +6,31 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import vn.trialapp.mediaplayerdev.ui.theme.DenimBlue
+import vn.trialapp.mediaplayerdev.R
+import vn.trialapp.mediaplayerdev.ui.theme.Common.Black
+import vn.trialapp.mediaplayerdev.ui.theme.MediaPlayerDevTheme
 
 @Composable
 fun HeaderBackground() {
     Box(modifier = Modifier
         .clip(
             RoundedCornerShape(
-                bottomStart = 60.dp,
-                bottomEnd = 60.dp
+                bottomStart = dimensionResource(R.dimen.mpd_header_rounded_corner_bottom_start),
+                bottomEnd = dimensionResource(R.dimen.mpd_header_rounded_corner_bottom_end)
             )
         )
-        .heightIn(100.dp)
+        .heightIn(dimensionResource(R.dimen.mpd_header_height_in))
         .fillMaxWidth()
-        .background(Color.Black)
+        .background(Black)
     )
 }
 
 @Preview
 @Composable
 private fun PreviewHeaderBackground() {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(DenimBlue)
-    ) {
+    MediaPlayerDevTheme {
         HeaderBackground()
     }
 }

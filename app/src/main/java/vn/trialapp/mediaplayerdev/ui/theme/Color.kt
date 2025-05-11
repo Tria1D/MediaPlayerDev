@@ -14,3 +14,11 @@ val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 val DenimBlue = Color(0xFF79BAEC)
 val Black = Color(0xFF000000)
+
+object Common {
+    val AliceBlue = Color(0xFFE5EEFD)
+    val AzureishWhite = Color(0xFFd9e2f3)
+    val JordyBlue = Color(0xFF99b6f3)
+    val BlueBallerina = Color(0xFFb7c8dc)
+    val Black = Color(0xFF000000)
+}

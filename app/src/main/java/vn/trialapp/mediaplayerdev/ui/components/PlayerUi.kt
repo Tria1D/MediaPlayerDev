@@ -8,10 +8,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import vn.trialapp.mediaplayerdev.R
 import vn.trialapp.mediaplayerdev.ui.theme.MediaPlayerDevTheme
-import vn.trialapp.mediaplayerdev.viewmodels.MediaUiEvent
+import vn.trialapp.mediaplayerdev.features.songdetail.SongDetailUiEvent
 
 @Composable
 fun PlayerUi(
@@ -19,13 +20,13 @@ fun PlayerUi(
     durationString: String,
     playResourceProvider: () -> Int,
     progressProvider: () -> Pair<Float, String>,
-    onUiEvent: (MediaUiEvent) -> Unit
+    onUiEvent: (SongDetailUiEvent) -> Unit
 ) {
     val (progress, progressString) = progressProvider()
 
     Box(
         modifier = modifier
-            .padding(16.dp)
+            .padding(dimensionResource(R.dimen.mpd_player_ui_box_container_padding_all))
             .background(color = Color.Transparent)
     ) {
         Column(
